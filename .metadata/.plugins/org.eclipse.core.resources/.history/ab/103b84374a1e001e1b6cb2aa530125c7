@@ -1,0 +1,98 @@
+package src.dynasty;
+
+import java.util.ArrayList;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import controller.action;
+import src.helper.helper_data;
+
+public class dynasty implements action {
+    private String name;
+    private String king;
+    private String dynasty;
+    // because there are more case where he year is define by interval
+    private String year;
+    private String id;
+    private String info;
+    private String [] connect;
+    public String[] getConnect() {
+        return connect;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setKing(String king) {
+        this.king = king;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getKing() {
+        return king;
+    }
+
+    public String getDynasty() {
+        return dynasty;
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setDynasty(String dynasty) {
+        this.dynasty = dynasty;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
+
+    @Override
+    public ArrayList<dynasty> search(String name_search) {
+        Gson gson = new GsonBuilder().create();
+        // arr for saving the result
+        ArrayList<dynasty> arr = new ArrayList<>();
+        try {
+            String json = helper_data.read_data("E:\\code\\oop_Project\\src\\data\\DynastyNKS.json");
+            // Parse JSON array to an array of objects
+            dynasty[] objects = gson.fromJson(json, dynasty[].class);
+            for (dynasty object : objects) {
+                if (object.getName().contains(name_search) || object.getKing().contains(name_search)
+                        || object.getDynasty().contains(name_search)) {
+                    arr.add(object);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return arr;
+    }
+
+    @Override
+    public ArrayList<dynasty> binary_search(String purpose) {
+        return search(purpose);
+    }
+
+    @Override
+    public ArrayList<dynasty> display() {
+        return search("");
+    }
+
+    @Override
+    public String toString(){
+        StringBuilder builder = new StringBuilder();
+        builder.append("Triều đại: ").append(dynasty).append("\n")
+            .append("Mô tả: ").append(info).append("\n");
+        return builder.toString();
+    }
+}
